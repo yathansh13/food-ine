@@ -1,0 +1,40 @@
+/* HomePage.css */
+.home-div {
+  margin-top: 5vh;
+}
+
+.food-grid {
+  display: flex;
+  justify-content: center;
+
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Centering the tag selection buttons */
+.tag-selection {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Adjust the gap between buttons as needed */
+  margin-bottom: 20px; /* Adds some space below the button container */
+}
+
+/* Styling the buttons to match the UI */
+.tag-selection button {
+  padding: 8px 16px; /* Adjust padding as needed */
+  border: none;
+  background-color: #007bff; /* Example button color, adjust as needed */
+  color: white;
+  cursor: pointer;
+  border-radius: 5px; /* Gives rounded corners to the buttons */
+  font-size: 16px; /* Adjust font size as needed */
+}
+
+.tag-selection button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect, adjust as needed */
+}
+.tag-selection button.active {
+  background-color: #004085; /* Darker shade for active state, adjust as needed */
+  color: #ffffff;
+  font-weight: bold; /* Optional: makes the text bold for active button */
+}
