@@ -1,0 +1,30 @@
+.cart-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.cart-items {
+  width: 100%;
+  max-width: 800px; /* Adjust based on your layout */
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .cart-page {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cart-items,
+  .checkout-details {
+    flex: 1;
+  }
+
+  .checkout-details {
+    margin-left: 20px;
+    max-width: 300px; /* Keeps the checkout details from stretching too wide */
+  }
+}
