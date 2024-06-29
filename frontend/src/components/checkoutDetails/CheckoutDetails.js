@@ -4,12 +4,11 @@ import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import "./CheckoutDetails.css";
 
-function CheckoutDetails() {
-  const [cartItems, setCartItems] = useState([]);
+function CheckoutDetails({ cartItems }) {
   const [userId, setUserId] = useState(null);
   const [tableNumber, setTableNumber] = useState("");
   const [subtotal, setSubtotal] = useState(0);
-  const { cartCount, resetCartCount } = useCart();
+  const { resetCartCount } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,40 +36,16 @@ function CheckoutDetails() {
 
   useEffect(() => {
     if (userId) {
-      fetchCartItems();
+      calculateSubtotal();
     }
-  }, [userId, cartCount]);
+  }, [userId, cartItems]);
 
-  const fetchCartItems = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("cartitems")
-        .select(
-          `
-          id,
-          quantity,
-          foods (
-            price,
-            name
-          )
-        `
-        )
-        .eq("user_id", userId);
-
-      if (error) {
-        throw error;
-      }
-      setCartItems(data);
-
-      // Calculate subtotal
-      const newSubtotal = data.reduce(
-        (acc, item) => acc + item.foods.price * item.quantity,
-        0
-      );
-      setSubtotal(newSubtotal);
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-    }
+  const calculateSubtotal = () => {
+    const newSubtotal = cartItems.reduce(
+      (acc, item) => acc + item.foods.price * item.quantity,
+      0
+    );
+    setSubtotal(newSubtotal);
   };
 
   const handleTableNumberChange = (e) => {
@@ -112,8 +87,6 @@ function CheckoutDetails() {
 
       alert("Order placed successfully!");
 
-      setCartItems([]);
-      setTableNumber("");
       resetCartCount();
       navigate("/orders");
     } catch (error) {
@@ -139,7 +112,9 @@ function CheckoutDetails() {
         min="1"
         max="99"
       />
-      <button onClick={handleOrderNow}>Order Now</button>
+      <button onClick={handleOrderNow} disabled={cartItems.length === 0}>
+        Order Now
+      </button>
     </div>
   );
 }
