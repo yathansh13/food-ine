@@ -9,42 +9,51 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [role, setRole] = useState(null); // State to store user role
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const fetchSessionAndRole = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
+
       if (session) {
         fetchUserRole(session.user.id);
       }
-    });
+    };
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        fetchUserRole(session.user.id);
+    fetchSessionAndRole();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        if (session) {
+          fetchUserRole(session.user.id);
+        } else {
+          setRole(null);
+        }
       }
-    });
+    );
 
-    return () => subscription.unsubscribe();
+    return () => authListener.subscription.unsubscribe();
   }, []);
 
   const fetchUserRole = async (userId) => {
-    const { data, error } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .single();
-    if (error) {
-      console.error(error);
-    } else {
+    try {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .single();
+      if (error) throw error;
       setRole(data.role);
       if (data.role === "staff") {
         navigate("/dashboard");
       }
+    } catch (error) {
+      console.error("Error fetching user role:", error);
     }
   };
 
@@ -52,37 +61,35 @@ export default function Signup() {
     e.preventDefault();
     setError(null);
 
-    if (isSigningIn) {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setError(error.message);
-      }
-    } else {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        setError(error.message);
+    try {
+      let result;
+      if (isSigningIn) {
+        result = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
       } else {
-        const { user } = data;
-        const { error: roleError } = await supabase.from("user_roles").insert([
-          {
-            user_id: user.id,
-            role: "customer", // Adjust role as necessary
-          },
-        ]);
+        result = await supabase.auth.signUp({
+          email,
+          password,
+        });
 
-        if (roleError) {
-          setError(roleError.message);
-        } else {
-          fetchUserRole(user.id); // Fetch role after signup
+        if (result.data.user) {
+          await supabase.from("user_roles").insert([
+            {
+              user_id: result.data.user.id,
+              role: "customer",
+            },
+          ]);
+          fetchUserRole(result.data.user.id);
         }
       }
+
+      if (result.error) {
+        throw result.error;
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -130,7 +137,7 @@ export default function Signup() {
     );
   } else {
     if (role === "staff") {
-      return null; // Render nothing since the user will be redirected to the dashboard
+      return null;
     }
     return (
       <div className="container">

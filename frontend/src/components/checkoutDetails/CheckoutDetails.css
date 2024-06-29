@@ -6,6 +6,12 @@
   width: 15vw;
 }
 
+.checkout-details button:disabled {
+  background-color: #d3d3d3;
+  color: #a9a9a9;
+  cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
   .checkout-details {
     width: 100%;
