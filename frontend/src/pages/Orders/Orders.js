@@ -62,7 +62,7 @@ export default function Orders() {
     <div className="orders-page">
       <h2>Orders</h2>
       <OrderList orders={orders} progress="wip" />
-      <OrderList orders={orders} progress="complete" />
+      <OrderList orders={orders} progress="completed" />
     </div>
   );
 }

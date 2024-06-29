@@ -38,12 +38,25 @@ export default function Signup() {
         setError(error.message);
       }
     } else {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
+
       if (error) {
         setError(error.message);
+      } else {
+        const { user } = data;
+        const { error: roleError } = await supabase.from("user_roles").insert([
+          {
+            user_id: user.id,
+            role: "customer", // Adjust role as necessary
+          },
+        ]);
+
+        if (roleError) {
+          setError(roleError.message);
+        }
       }
     }
   };
@@ -81,6 +94,7 @@ export default function Signup() {
               : "Already have an account?"}{" "}
             <button
               className="sub-button"
+              type="button"
               onClick={() => setIsSigningIn(!isSigningIn)}
             >
               {isSigningIn ? "Sign Up" : "Sign In"}
