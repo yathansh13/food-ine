@@ -1,38 +1,82 @@
-.main-form {
-  max-width: 80vw;
-  margin-left: 10vw;
-  margin-top: 20px;
+.main-div {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
 
-/* Add this CSS to your stylesheet (e.g., App.css) */
+.form-css {
+  margin-top: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
 
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  margin-top: 200px;
-  text-align: center;
-  gap: 50px;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
 
 .container div {
-  font-size: 2rem; /* Large text */
-  margin-bottom: 20px; /* Spacing between text and button */
-  color: #333; /* Assuming a dark text for the theme */
+  margin-bottom: 20px;
 }
 
-.container button {
-  font-size: 1.5rem; /* Large button text */
-  padding: 10px 20px; /* Bigger button */
-  background-color: #007bff; /* Theme primary color */
+.sub-text {
+  color: #666;
+  font-size: 0.8rem;
+}
+.sub-button {
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  padding: 8px 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-.container button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
 }
