@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabase";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import "./CheckoutDetails.css";
 
 function CheckoutDetails() {
   const [cartItems, setCartItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const [tableNumber, setTableNumber] = useState("");
   const [subtotal, setSubtotal] = useState(0);
+  const { cartCount, resetCartCount } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -34,7 +39,7 @@ function CheckoutDetails() {
     if (userId) {
       fetchCartItems();
     }
-  }, [userId]);
+  }, [userId, cartCount]); // Update when userId or cartCount changes
 
   const fetchCartItems = async () => {
     try {
@@ -99,10 +104,20 @@ function CheckoutDetails() {
       ]);
 
       if (error) throw error;
+
+      // Remove cart items after successful order placement
+      await Promise.all(
+        cartItems.map(async (item) => {
+          await supabase.from("cartitems").delete().eq("id", item.id);
+        })
+      );
+
       alert("Order placed successfully!");
       // Optionally, clear cart and table number after successful order
       setCartItems([]);
       setTableNumber("");
+      resetCartCount();
+      navigate("/orders");
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order.");

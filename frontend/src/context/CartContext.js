@@ -64,6 +64,10 @@ export function CartProvider({ children }) {
     setCartCount((prevCount) => Math.max(prevCount - quantity, 0));
   };
 
+  const resetCartCount = () => {
+    setCartCount(0);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -71,6 +75,7 @@ export function CartProvider({ children }) {
         incrementCartCount,
         decrementCartCount,
         fetchCartCount,
+        resetCartCount,
         userId,
       }}
     >

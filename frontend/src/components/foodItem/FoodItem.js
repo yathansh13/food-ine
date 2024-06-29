@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./FoodItem.css";
 import { supabase } from "../../utils/supabase";
 import { useCart } from "../../context/CartContext";
 
 export default function FoodItem({ id, name, image, price }) {
   const { incrementCartCount, userId } = useCart();
+  const [addedToCart, setAddedToCart] = useState(false); // State to track if item is added to cart
 
   async function addToCart(foodItemId) {
     try {
@@ -42,6 +43,8 @@ export default function FoodItem({ id, name, image, price }) {
       }
 
       incrementCartCount(1);
+      setAddedToCart(true); // Set addedToCart state to true
+      setTimeout(() => setAddedToCart(false), 2000); // Reset addedToCart after 2 seconds
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
@@ -55,6 +58,7 @@ export default function FoodItem({ id, name, image, price }) {
       <button onClick={() => addToCart(id)} className="add-to-cart-btn">
         Add to Cart
       </button>
+      {addedToCart && <div className="added-to-cart">Added to Cart!</div>}
     </div>
   );
 }

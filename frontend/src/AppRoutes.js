@@ -5,7 +5,6 @@ import Cart from "./pages/Cart/Cart";
 import Orders from "./pages/Orders/Orders";
 import Signup from "./pages/Signup/Signup";
 import ProtectedRoute from "./ProtectedRoute";
-// import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (

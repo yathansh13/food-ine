@@ -1,7 +1,6 @@
 .cart-item {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .cart-item-image {
@@ -19,10 +18,4 @@
 .items-detail {
   display: flex;
   gap: 10px;
-}
-
-.quantity-counter {
-  margin-top: 10px;
-  display: flex;
-  gap: 5px;
 }

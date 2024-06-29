@@ -1,0 +1,27 @@
+.orders-page {
+  padding: 20px;
+}
+
+.orders-section {
+  margin-bottom: 20px;
+}
+
+.order-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.order-item h3,
+.order-item p {
+  margin: 5px 0;
+}
+
+.order-item ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.order-item ul li {
+  margin: 5px 0;
+}

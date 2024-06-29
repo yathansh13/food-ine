@@ -50,11 +50,31 @@ function Cart() {
         .update({ quantity: newQuantity })
         .eq("id", cartItemId);
       if (error) throw error;
+
+      // Update local state without refetching all items
       setCartItems((prevCartItems) =>
         prevCartItems.map((item) =>
           item.id === cartItemId ? { ...item, quantity: newQuantity } : item
         )
       );
+
+      // Update cart count in context
+      const delta =
+        newQuantity - cartItems.find((item) => item.id === cartItemId).quantity;
+      if (delta > 0) {
+        incrementCartCount(delta);
+      } else if (delta < 0) {
+        decrementCartCount(-delta);
+      }
+
+      // Remove item from cart if quantity is decremented to 0
+      if (newQuantity === 0) {
+        await supabase.from("cartitems").delete().eq("id", cartItemId);
+        setCartItems((prevCartItems) =>
+          prevCartItems.filter((item) => item.id !== cartItemId)
+        );
+        decrementCartCount(1); // Adjust cart count
+      }
     } catch (error) {
       console.error("Error updating quantity:", error);
     }
@@ -63,37 +83,50 @@ function Cart() {
   const incrementQuantity = (cartItemId, currentQuantity) => {
     const newQuantity = currentQuantity + 1;
     updateQuantity(cartItemId, newQuantity);
-    incrementCartCount(1);
   };
 
   const decrementQuantity = (cartItemId, currentQuantity) => {
     if (currentQuantity > 1) {
       const newQuantity = currentQuantity - 1;
       updateQuantity(cartItemId, newQuantity);
-      decrementCartCount(1);
+    } else if (currentQuantity === 1) {
+      // Remove item from cart if quantity is 1
+      updateQuantity(cartItemId, 0);
     }
   };
 
   return (
     <div className="cart-page">
       <div>
-        {cartItems.map((item) => (
-          <div className="cart-items" key={item.id}>
-            <CartItem item={item.foods} />
-            <div className="quantity-counter">
-              <p>Quantity</p>
-              <button onClick={() => decrementQuantity(item.id, item.quantity)}>
-                -
-              </button>
-              <p>{item.quantity}</p>
-              <button onClick={() => incrementQuantity(item.id, item.quantity)}>
-                +
-              </button>
+        {cartItems.length === 0 ? (
+          <p className="empty-cart-message">
+            Your cart seems to be empty, explore more items!
+          </p>
+        ) : (
+          cartItems.map((item) => (
+            <div className="cart-items" key={item.id}>
+              <CartItem item={item.foods} />
+              <div className="quantity-counter">
+                <p>Quantity</p>
+                <button
+                  className="counter-button"
+                  onClick={() => decrementQuantity(item.id, item.quantity)}
+                >
+                  -
+                </button>
+                <p>{item.quantity}</p>
+                <button
+                  className="counter-button"
+                  onClick={() => incrementQuantity(item.id, item.quantity)}
+                >
+                  +
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
-      <CheckoutDetails />
+      <CheckoutDetails cartItems={cartItems} fetchCartItems={fetchCartItems} />
     </div>
   );
 }

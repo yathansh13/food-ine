@@ -38,3 +38,15 @@
   color: #ffffff;
   font-weight: bold; /* Optional: makes the text bold for active button */
 }
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+  .food-grid {
+    flex-direction: column; /* Stacks the items vertically on smaller screens */
+    align-items: center; /* Centers the items on smaller screens */
+  }
+  .tag-selection button {
+    padding: 8px 12px; /* Adjust padding as needed */
+    font-size: 14px; /* Adjust font size as needed */
+  }
+}

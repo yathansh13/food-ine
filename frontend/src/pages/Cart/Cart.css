@@ -5,6 +5,44 @@
 }
 
 .cart-items {
-  flex: 1;
+  padding: 20px;
+  border: solid 1px;
+  border-radius: 5px;
+  gap: 31px;
+  display: flex;
+  align-items: center;
   margin-right: 20px;
+  justify-content: space-between;
+  width: 75vw;
+}
+
+.quantity-counter {
+  display: flex;
+  gap: 20px;
+}
+
+.counter-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 18px;
+}
+.empty-cart-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .cart-items {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cart-page {
+    flex-direction: column;
+    align-items: center;
+  }
 }
