@@ -41,7 +41,8 @@ export default function Orders() {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .order("id", { ascending: false });
 
       if (error) {
         throw error;

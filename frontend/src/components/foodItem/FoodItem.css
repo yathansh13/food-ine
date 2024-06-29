@@ -4,6 +4,7 @@
   overflow: hidden;
   text-align: center;
   padding: 10px;
+  height: 50vh;
 }
 
 .food-image {
@@ -17,14 +18,12 @@
   margin: 10px;
 }
 
-
 .food-item {
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   text-align: center;
 }
-
 
 .add-to-cart-btn {
   background-color: #007bff;

@@ -4,6 +4,7 @@
   justify-content: space-between;
   margin-bottom: 20px;
   width: 15vw;
+  height: 20vh;
 }
 
 .checkout-details button:disabled {
