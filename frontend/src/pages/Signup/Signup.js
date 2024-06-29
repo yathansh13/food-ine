@@ -9,21 +9,44 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const [role, setRole] = useState(null); // State to store user role
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) {
+        fetchUserRole(session.user.id);
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) {
+        fetchUserRole(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserRole = async (userId) => {
+    const { data, error } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .single();
+    if (error) {
+      console.error(error);
+    } else {
+      setRole(data.role);
+      if (data.role === "staff") {
+        navigate("/dashboard");
+      }
+    }
+  };
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -56,6 +79,8 @@ export default function Signup() {
 
         if (roleError) {
           setError(roleError.message);
+        } else {
+          fetchUserRole(user.id); // Fetch role after signup
         }
       }
     }
@@ -104,6 +129,9 @@ export default function Signup() {
       </div>
     );
   } else {
+    if (role === "staff") {
+      return null; // Render nothing since the user will be redirected to the dashboard
+    }
     return (
       <div className="container">
         <div>Welcome Back!</div>
