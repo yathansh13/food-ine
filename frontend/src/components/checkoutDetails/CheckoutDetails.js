@@ -39,7 +39,7 @@ function CheckoutDetails() {
     if (userId) {
       fetchCartItems();
     }
-  }, [userId, cartCount]); // Update when userId or cartCount changes
+  }, [userId, cartCount]);
 
   const fetchCartItems = async () => {
     try {
@@ -99,13 +99,11 @@ function CheckoutDetails() {
           user_id: userId,
           table_number: parseInt(tableNumber, 10),
           total: subtotal * 1.1,
-          cart_items: orderItems, // Insert cart items as JSON
+          cart_items: orderItems,
         },
       ]);
 
       if (error) throw error;
-
-      // Remove cart items after successful order placement
       await Promise.all(
         cartItems.map(async (item) => {
           await supabase.from("cartitems").delete().eq("id", item.id);
@@ -113,7 +111,7 @@ function CheckoutDetails() {
       );
 
       alert("Order placed successfully!");
-      // Optionally, clear cart and table number after successful order
+
       setCartItems([]);
       setTableNumber("");
       resetCartCount();

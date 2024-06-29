@@ -28,7 +28,7 @@ export default function ProtectedRoute({ children }) {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // You can replace this with a spinner or some loading animation
+    return <div>Loading...</div>;
   }
 
   if (!session) {

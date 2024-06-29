@@ -47,7 +47,6 @@ export default function Orders() {
         throw error;
       }
 
-      // Ensure items is an array
       const ordersWithItems = data.map((order) => ({
         ...order,
         items: order.items || [],

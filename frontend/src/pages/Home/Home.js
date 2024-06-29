@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import "./Home.css"; // Ensure the path is correct
-import FoodItem from "../../components/foodItem/FoodItem"; // Ensure the path is correct
-import { supabase } from "../../utils/supabase"; // Ensure the Supabase client is correctly set up
+import "./Home.css";
+import FoodItem from "../../components/foodItem/FoodItem";
+import { supabase } from "../../utils/supabase";
 
 export default function HomePage() {
   const [selectedTag, setSelectedTag] = useState("all");
   const [foodItems, setFoodItems] = useState([]);
 
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchFoodItems();
@@ -26,7 +26,7 @@ export default function HomePage() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false); // Set loading to false once fetching is done
+      setLoading(false);
     }
   }
 
@@ -39,12 +39,11 @@ export default function HomePage() {
   );
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading message while data is being fetched
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="home-div">
-      {/* Tag selection buttons */}
       <div className="tag-selection">
         {["all", "starters", "main", "dessert", "drink"].map((tag) => (
           <button
@@ -57,7 +56,6 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* Grid of filtered food items */}
       <div className="food-grid">
         {filteredItems.map((item) => (
           <FoodItem key={item.id} {...item} />

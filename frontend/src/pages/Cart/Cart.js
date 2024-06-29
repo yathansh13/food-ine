@@ -51,14 +51,12 @@ function Cart() {
         .eq("id", cartItemId);
       if (error) throw error;
 
-      // Update local state without refetching all items
       setCartItems((prevCartItems) =>
         prevCartItems.map((item) =>
           item.id === cartItemId ? { ...item, quantity: newQuantity } : item
         )
       );
 
-      // Update cart count in context
       const delta =
         newQuantity - cartItems.find((item) => item.id === cartItemId).quantity;
       if (delta > 0) {
@@ -67,13 +65,12 @@ function Cart() {
         decrementCartCount(-delta);
       }
 
-      // Remove item from cart if quantity is decremented to 0
       if (newQuantity === 0) {
         await supabase.from("cartitems").delete().eq("id", cartItemId);
         setCartItems((prevCartItems) =>
           prevCartItems.filter((item) => item.id !== cartItemId)
         );
-        decrementCartCount(1); // Adjust cart count
+        decrementCartCount(1);
       }
     } catch (error) {
       console.error("Error updating quantity:", error);
@@ -90,7 +87,6 @@ function Cart() {
       const newQuantity = currentQuantity - 1;
       updateQuantity(cartItemId, newQuantity);
     } else if (currentQuantity === 1) {
-      // Remove item from cart if quantity is 1
       updateQuantity(cartItemId, 0);
     }
   };

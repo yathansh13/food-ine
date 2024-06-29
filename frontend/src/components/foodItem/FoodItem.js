@@ -5,8 +5,7 @@ import { useCart } from "../../context/CartContext";
 
 export default function FoodItem({ id, name, image, price }) {
   const { incrementCartCount, userId } = useCart();
-  const [addedToCart, setAddedToCart] = useState(false); // State to track if item is added to cart
-
+  const [addedToCart, setAddedToCart] = useState(false);
   async function addToCart(foodItemId) {
     try {
       const parsedFoodItemId = parseInt(foodItemId, 10);
@@ -43,8 +42,8 @@ export default function FoodItem({ id, name, image, price }) {
       }
 
       incrementCartCount(1);
-      setAddedToCart(true); // Set addedToCart state to true
-      setTimeout(() => setAddedToCart(false), 2000); // Reset addedToCart after 2 seconds
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
