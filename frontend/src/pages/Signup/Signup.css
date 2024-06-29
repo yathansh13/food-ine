@@ -1,0 +1,38 @@
+.main-form {
+  max-width: 80vw;
+  margin-left: 10vw;
+  margin-top: 20px;
+}
+
+/* Add this CSS to your stylesheet (e.g., App.css) */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200px;
+  text-align: center;
+  gap: 50px;
+}
+
+.container div {
+  font-size: 2rem; /* Large text */
+  margin-bottom: 20px; /* Spacing between text and button */
+  color: #333; /* Assuming a dark text for the theme */
+}
+
+.container button {
+  font-size: 1.5rem; /* Large button text */
+  padding: 10px 20px; /* Bigger button */
+  background-color: #007bff; /* Theme primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.container button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}

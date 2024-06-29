@@ -1,25 +1,45 @@
-// React component for Navbar
-import React, { useState } from "react";
-import "./Navbar.css"; // Assuming the CSS file is named Navbar.css
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
+import { supabase } from "../../utils/supabase";
+import "./Navbar.css"; // Ensure the path is correct
 
 export default function Navbar() {
-  // Dummy user state for demonstration
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { cartCount, fetchCartCount, userId } = useCart();
   const navigate = useNavigate();
-  const cartCount = 0;
+
+  useEffect(() => {
+    if (userId) {
+      fetchCartCount(userId);
+    }
+  }, [userId]);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Error signing out:", error);
+    navigate("/signup");
+  };
+
   function openCart() {
     navigate("/cart");
   }
+
   function openMenu() {
     navigate("/");
+  }
+
+  function openSignup() {
+    navigate("/signup");
+  }
+  function openOrders() {
+    navigate("/orders");
   }
 
   return (
     <nav className="navbar">
       <div className="logo">Cool Logo!</div>
       <div className="menu">
-        {isLoggedIn ? (
+        {userId ? (
           <>
             <button className="nav-item" onClick={openMenu}>
               Menu
@@ -27,13 +47,15 @@ export default function Navbar() {
             <button className="nav-item" onClick={openCart}>
               Cart <span className="cart-badge">{cartCount}</span>
             </button>
-            <button className="nav-item">Order History</button>
-            <button className="nav-item" onClick={() => setIsLoggedIn(false)}>
+            <button className="nav-item" onClick={openOrders}>
+              Orders
+            </button>
+            <button className="nav-item" onClick={handleLogout}>
               Logout
             </button>
           </>
         ) : (
-          <button className="nav-item" onClick={() => setIsLoggedIn(true)}>
+          <button className="nav-item" onClick={openSignup}>
             Login
           </button>
         )}
